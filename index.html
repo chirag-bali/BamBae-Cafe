@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BamBae Café | Premium Vietnamese & Health Café, Panchkula</title>
+<meta name="description" content="BamBae Café – Panchkula's premier destination for authentic Bánh Mì, smoothie bowls, bubble teas, and specialty coffee inside Welcomhotel Bella Vista."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div id="preloader">
+  <div class="pl-ring"></div>
+  <div class="pl-logo">Bam<em>Bae</em></div>
+</div>
+
+<div id="lb" onclick="lbClose()">
+  <span class="lb-x" onclick="lbClose()">×</span>
+  <span class="lb-arrow lb-prev" onclick="event.stopPropagation();lbMove(-1)">←</span>
+  <img id="lb-img" src="" alt="Gallery"/>
+  <span class="lb-arrow lb-next" onclick="event.stopPropagation();lbMove(1)">→</span>
+</div>
+
+<div class="res-overlay" id="resModal" onclick="resClose()">
+  <div class="res-modal" onclick="event.stopPropagation()">
+    <span class="res-x" onclick="resClose()">×</span>
+    <span class="script-tag">Reserve a table</span>
+    <h3 class="subheading" style="margin-bottom:6px;">Book Your Spot</h3>
+    <p style="font-size:.9rem;color:var(--muted);margin-bottom:28px;font-weight:300;">We'll confirm instantly via WhatsApp.</p>
+    <div class="form-group">
+      <label class="form-label">Your Name</label>
+      <input type="text" id="rName" class="form-input" placeholder="Full name">
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="date" id="rDate" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Time</label>
+        <input type="time" id="rTime" class="form-input">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Number of Guests</label>
+      <select id="rGuests" class="form-input">
+        <option>1 Person</option>
+        <option selected>2 People</option>
+        <option>3 People</option>
+        <option>4 People</option>
+        <option>5+ People (Group)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Special Requests (Optional)</label>
+      <input type="text" id="rRequests" class="form-input" placeholder="Birthday, Anniversary, allergies, etc.">
+    </div>
+    <button class="btn btn-terra" style="width:100%;justify-content:center;padding:15px;" onclick="resSubmit()">
+      Check Availability →
+    </button>
+  </div>
+</div>
+
+<button class="cart-fab" id="cartFab" onclick="cartToggle()">
+  <span class="fab-badge" id="cartCount">0</span>
+  <span>Order</span>
+  <span id="cartFabTotal">₹0</span>
+</button>
+
+<div class="cart-overlay" id="cartOverlay" onclick="cartToggle()"></div>
+
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-head">
+    <h3>Your Order</h3>
+    <span class="cart-x" onclick="cartToggle()">×</span>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">Your cart is empty.<br>Add some delicious items!</div>
+  </div>
+  <div class="cart-foot">
+    <div class="cart-total-row">
+      <span class="lbl">Grand Total</span>
+      <span class="val" id="cartGrandTotal">₹0</span>
+    </div>
+    <select id="orderType" class="order-type-select">
+      <option>Takeaway / Pick-up</option>
+      <option>Dine-in at Café</option>
+    </select>
+    <button class="btn btn-wa" style="width:100%;justify-content:center;font-size:.95rem;padding:15px;" onclick="cartCheckout()">
+      <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:currentColor;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Checkout via WhatsApp
+    </button>
+    <p class="checkout-note">Pay via UPI or cash at the café.</p>
+  </div>
+</div>
+
+<a href="https://wa.me/919501011265?text=Hello%20BamBae!%20I%20have%20a%20query." target="_blank" class="wa-float" title="Chat with us">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a onclick="go('home')" class="nav-logo">Bam<em>Bae</em></a>
+      <ul class="nav-links">
+        <li><a onclick="go('home')" data-p="home" class="active">Home</a></li>
+        <li><a onclick="go('menu')" data-p="menu">Menu & Order</a></li>
+        <li><a onclick="go('about')" data-p="about">Our Story</a></li>
+        <li><a onclick="go('gallery')" data-p="gallery">Gallery</a></li>
+        <li><a onclick="go('contact')" data-p="contact">Find Us</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button onclick="resOpen()" class="btn btn-ghost" style="padding:10px 22px;font-size:.85rem;">Reserve Table</button>
+      </div>
+      <button class="hamburger" id="ham" onclick="hamToggle()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mMenu">
+  <a onclick="go('home')" data-p="home">Home</a>
+  <a onclick="go('menu')" data-p="menu">Menu</a>
+  <a onclick="go('about')" data-p="about">Our Story</a>
+  <a onclick="go('gallery')" data-p="gallery">Gallery</a>
+  <a onclick="go('contact')" data-p="contact">Find Us</a>
+  <div class="mm-divider"></div>
+  <div class="mm-bottom">
+    <button onclick="resOpen();hamClose();" class="btn btn-terra btn-lg">Book a Table</button>
+  </div>
+</div>
+
+<main id="root">
+
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-noise"></div>
+    <div class="container" style="position:relative;z-index:3;padding-top:90px;padding-bottom:120px;">
+      <div class="hero-content">
+        <div class="hero-eyebrow reveal">
+          <span class="hero-dot"></span>
+          <span id="timeGreet">Good day, Panchkula</span>
+          <span class="hero-dot"></span>
+        </div>
+        <h1 class="display hero-title reveal d1">
+          Fresh Flavors.<br>
+          <em>Authentic</em> Vibes.
+        </h1>
+        <p class="hero-sub reveal d2">
+          Vietnamese Bánh Mì, artisan smoothie bowls, bubble teas and specialty coffee — inside Welcomhotel Bella Vista, Sector 5, Panchkula.
+        </p>
+        <div class="hero-ctas reveal d3">
+          <button onclick="go('menu')" class="btn btn-terra btn-lg">Order Now →</button>
+          <button onclick="resOpen()" class="btn btn-ghost btn-lg">Book a Table</button>
+        </div>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="container hs-inner">
+        <div class="hs-stats">
+          <div class="hs-stat">
+            <div class="hs-num">4.3★</div>
+            <div class="hs-lbl">Zomato Rating</div>
+          </div>
+          <div class="hs-sep"></div>
+          <div class="hs-stat">
+            <div class="hs-num">10k+</div>
+            <div class="hs-lbl">Bowls Served</div>
+          </div>
+          <div class="hs-sep"></div>
+          <div class="hs-stat">
+            <div class="hs-num">31+</div>
+            <div class="hs-lbl">Menu Items</div>
+          </div>
+        </div>
+        <div class="hs-delivery">
+          <span class="hs-delivery-label">Deliver across Tricity via</span>
+          <a href="https://www.zomato.com/chandigarh/bam-bae-sector-5-panchkula" target="_blank" class="btn btn-zomato btn-sm">Zomato</a>
+          <a href="https://www.swiggy.com/city/chandigarh/bambae-panchkula-rest1339456" target="_blank" class="btn btn-swiggy btn-sm">Swiggy</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div style="text-align:center;max-width:540px;margin:0 auto;" class="reveal">
+        <div class="label-pill">Signature Offerings</div>
+        <h2 class="heading">Panchkula's Favorites</h2>
+        <p class="lead" style="margin-top:12px;">Three reasons people keep coming back.</p>
+      </div>
+      <div class="highlights-grid">
+        <div class="hcard reveal d1">
+          <div class="hcard-num">01</div>
+          <div class="hcard-img-wrap" style="width:100%; aspect-ratio: auto; height: 260px;">
+            <img class="hcard-img" src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=1200&q=80" alt="Toasties Placeholder">
+          </div>
+          <div class="hcard-body">
+            <div class="hcard-tag">Handcrafted</div>
+            <h3 class="hcard-title">Authentic Toasties</h3>
+            <p class="hcard-desc">Crispy and savory Vietnamese Chicken toasties loaded with fresh ingredients and vibrant Asian street flavors.</p>
+            <a onclick="go('menu')" class="hcard-link">View Sandwiches →</a>
+          </div>
+        </div>
+        <div class="hcard reveal d2">
+          <div class="hcard-num">02</div>
+          <div class="hcard-img-wrap" style="width:100%; aspect-ratio: auto; height: 260px;">
+            <img class="hcard-img" src="https://images.unsplash.com/photo-1577805947697-89e18249d767?w=1200&q=80" alt="Protein Shake">
+          </div>
+          <div class="hcard-body">
+            <div class="hcard-tag">Premium Blends</div>
+            <h3 class="hcard-title">Protein Shakes</h3>
+            <p class="hcard-desc">Rich Cookie & Cream and Chocolate Peanut Butter shakes made to fuel your day and satisfy your sweet cravings.</p>
+            <a onclick="go('menu')" class="hcard-link">View Drinks →</a>
+          </div>
+        </div>
+        <div class="hcard reveal d3">
+          <div class="hcard-num">03</div>
+          <div class="hcard-img-wrap" style="width:100%; aspect-ratio: auto; height: 260px;">
+            <img class="hcard-img" src="https://images.unsplash.com/photo-1494597564530-871f2b93ac55?w=1200&q=80" alt="Smoothie Bowls Placeholder">
+          </div>
+          <div class="hcard-body">
+            <div class="hcard-tag">Nourishing</div>
+            <h3 class="hcard-title">Healthy Smoothie Bowls</h3>
+            <p class="hcard-desc">Thick frozen blends of Berry Blast, Tropical Mango Chia and Matcha, topped with fresh fruit and granola.</p>
+            <a onclick="go('menu')" class="hcard-link">View Bowls →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--cream-warm); padding-top: 80px;">
+    <div class="container">
+      <div style="text-align:center;max-width:540px;margin:0 auto;" class="reveal">
+        <div class="label-pill">Happy Guests</div>
+        <h2 class="heading">What Customers Say</h2>
+        <p class="lead" style="margin-top:12px;">Real reviews from our amazing community.</p>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card reveal d1">
+          <div class="stars">★★★★★</div>
+          <p class="testi-text">"Absolutely love the Tropical Mango Chia Bowl! The ingredients are so fresh and the portion size is perfect for a healthy breakfast. BamBae is my new favorite spot in Panchkula."</p>
+          <p class="testi-author">— Priya S.</p>
+        </div>
+        <div class="testi-card reveal d2">
+          <div class="stars">★★★★★</div>
+          <p class="testi-text">"The Classic Vietnamese Grilled Chicken Bánh Mì took me straight back to the streets of Hanoi. Crispy baguette and super flavorful filling. Highly recommend!"</p>
+          <p class="testi-author">— Rahul M.</p>
+        </div>
+        <div class="testi-card reveal d3">
+          <div class="stars">★★★★★</div>
+          <p class="testi-text">"Best Boba tea in the Tricity, hands down. The ambiance inside Bella Vista makes it a perfect place for evening dates or catching up with friends."</p>
+          <p class="testi-author">— Anjali K.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="page" id="page-menu">
+  <header class="pg-header">
+    <div class="container">
+      <span class="script-tag reveal">Explore & Order</span>
+      <h1 class="heading reveal d1">The Menu</h1>
+      <p class="reveal d2">Bánh Mì, Toasties, Bowls, Protein Shakes, Pancakes & Ice Teas — crafted fresh daily.</p>
+    </div>
+  </header>
+  <div class="menu-sticky">
+    <div class="container">
+      <div class="menu-header-bar">
+        <div class="menu-filters" id="menuFilters">
+          <button class="fbtn on" data-f="all">All Items</button>
+          <button class="fbtn combo-btn" data-f="combos">★ Combos</button>
+          <button class="fbtn" data-f="milktea">Milk Bubble Tea</button>
+          <button class="fbtn" data-f="tea">Water Bubble Tea</button>
+          <button class="fbtn" data-f="coffee">Coffee</button>
+          <button class="fbtn" data-f="banhmi">Bánh Mì</button>
+          <button class="fbtn" data-f="toasties">Toasties</button>
+          <button class="fbtn" data-f="shakes">Protein Shakes</button>
+          <button class="fbtn" data-f="bowls">Smoothie Bowls</button>
+          <button class="fbtn" data-f="pancakes">Pancakes</button>
+        </div>
+        <div class="search-wrap">
+          <span class="search-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          <input type="text" id="menuSearch" class="search-input" placeholder="Search menu...">
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="menu-grid" id="menuGrid"></div>
+      <div class="delivery-banner reveal">
+        <div>
+          <h3>Craving BamBae?</h3>
+          <p>We deliver across the Tricity via Zomato & Swiggy.</p>
+        </div>
+        <div class="delivery-btns">
+          <a href="https://www.zomato.com/chandigarh/bam-bae-sector-5-panchkula" target="_blank" class="btn btn-zomato">Order on Zomato</a>
+          <a href="https://www.swiggy.com/city/chandigarh/bambae-panchkula-rest1339456" target="_blank" class="btn btn-swiggy">Order on Swiggy</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="page" id="page-about">
+  <header class="pg-header">
+    <div class="container">
+      <span class="script-tag reveal">Who we are</span>
+      <h1 class="heading reveal d1">Our Story</h1>
+      <p class="reveal d2">Redefining café culture in Panchkula with wholesome, vibrant living.</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-imgs reveal">
+          <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80" class="about-img-main" alt="Cafe Interior Placeholder">
+          <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80" class="about-img-float" alt="Coffee Aesthetic Placeholder">
+        </div>
+        <div class="about-text reveal d2">
+          <div class="label-pill">The Vision</div>
+          <h2 class="heading" style="margin-bottom:24px;">A Fresh Take on<br>Asian Comfort</h2>
+          <p>BamBae was born out of a desire to bring clean, vibrant and incredibly flavorful food to the Tricity. Nestled inside the beautiful Welcomhotel Bella Vista in Sector 5, Panchkula, we created a space that feels like a genuine oasis.</p>
+          <p>Inspired by health-conscious café culture and authentic Asian street flavors, our menu is an extensive fusion — from crispy Bánh Mì baguettes and Vietnamese dripped coffees to protein-packed shakes and towering Biscoff pancakes.</p>
+          <p>Every ingredient is sourced fresh. Every recipe is crafted with intention. We're proud to be Panchkula's go-to destination for eating well and feeling good.</p>
+          <div class="about-badges">
+            <div class="ab-item"><h4>4.3★</h4><p>Zomato Dining</p></div>
+            <div class="ab-item"><h4>10k+</h4><p>Bowls Served</p></div>
+            <div class="ab-item"><h4>100%</h4><p>Fresh Daily</p></div>
+            <div class="ab-item"><h4>31+</h4><p>Menu Items</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section" style="background:var(--cream-warm);padding:80px 0;">
+    <div class="container">
+      <div style="text-align:center;max-width:520px;margin:0 auto 64px;" class="reveal">
+        <div class="label-pill">Our Commitments</div>
+        <h2 class="heading">Why BamBae</h2>
+      </div>
+      <div class="values-grid">
+        <div class="vcard reveal d1">
+          <span class="vcard-icon">🌿</span>
+          <h3 class="vcard-title">Farm Fresh</h3>
+          <p class="vcard-desc">We source fresh, seasonal ingredients daily. No preservatives, no compromises — just honest, nutritious food.</p>
+        </div>
+        <div class="vcard reveal d2">
+          <span class="vcard-icon">🌏</span>
+          <h3 class="vcard-title">Authentic Recipes</h3>
+          <p class="vcard-desc">Our Bánh Mì and Asian-inspired dishes follow traditional techniques adapted for the modern Panchkula palate.</p>
+        </div>
+        <div class="vcard reveal d3">
+          <span class="vcard-icon">☕</span>
+          <h3 class="vcard-title">Specialty Craft</h3>
+          <p class="vcard-desc">From slow-dripped Vietnamese coffee to hand-crafted boba pearls — everything is made with patience and care.</p>
+        </div>
+      </div>
+
+      <div class="faq-wrap reveal">
+        <div class="label-pill" style="display:table; margin:0 auto;">Quick Answers</div>
+        <h2 class="heading" style="text-align:center; margin-bottom: 40px;">Frequently Asked Questions</h2>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Do you offer Vegan or Gluten-Free options?</div>
+          <div class="faq-a"><div class="faq-a-inner">Yes! Many of our Smoothie Bowls, Teas, and Salads are naturally vegan and gluten-free. Please let our staff know about your dietary preferences when ordering, and we will happily accommodate you.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Is there parking available at the café?</div>
+          <div class="faq-a"><div class="faq-a-inner">Absolutely. Since we are located inside Welcomhotel Bella Vista, ample and secure valet parking is available for all our guests visiting the café.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Do you take bulk orders or cater for events?</div>
+          <div class="faq-a"><div class="faq-a-inner">We certainly do! We regularly cater to corporate lunches, birthdays, and private parties. Please reach out to us via our WhatsApp Support to discuss custom packages.</div></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Can I order online for home delivery?</div>
+          <div class="faq-a"><div class="faq-a-inner">Yes, you can order directly through Zomato or Swiggy for delivery across the Tricity area. You can also place an order here on the website for self-pickup or dine-in.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<div class="page" id="page-gallery">
+  <header class="pg-header">
+    <div class="container">
+      <span class="script-tag reveal">Visual Journey</span>
+      <h1 class="heading reveal d1">Gallery</h1>
+      <p class="reveal d2">A peek into our vibrant food and cozy corners at Bella Vista.</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="container">
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="gi gi-tall reveal" onclick="lbOpen(0)">
+          <img src="https://images.unsplash.com/photo-1623341214825-9f4f963727da?w=800&q=80" alt="Toasties">
+          <div class="gi-overlay"><span class="gi-cap">Pan-Asian Toasties</span></div>
+        </div>
+        <div class="gi gi-short reveal d1" onclick="lbOpen(1)">
+          <img src="https://images.unsplash.com/photo-1514056052883-d017fddd0426?w=800&q=80" alt="Shake">
+          <div class="gi-overlay"><span class="gi-cap">Cookie & Cream Shake</span></div>
+        </div>
+        <div class="gi gi-short reveal d2" onclick="lbOpen(2)">
+          <img src="https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=800&q=80" alt="Smoothie Bowl">
+          <div class="gi-overlay"><span class="gi-cap">Chocolate Almond Bowl</span></div>
+        </div>
+        <div class="gi gi-short reveal d1" onclick="lbOpen(3)">
+          <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800&q=80" alt="Pancake">
+          <div class="gi-overlay"><span class="gi-cap">Biscoff Pancakes</span></div>
+        </div>
+        <div class="gi gi-short reveal d2" onclick="lbOpen(4)">
+          <img src="https://images.unsplash.com/photo-1505252585461-04db1eb84625?w=800&q=80" alt="Bowl">
+          <div class="gi-overlay"><span class="gi-cap">Mango Chia Bowl</span></div>
+        </div>
+        <div class="gi gi-short reveal d1" onclick="lbOpen(5)">
+          <img src="https://images.unsplash.com/photo-1493770348161-369560ae357d?w=800&q=80" alt="Toasties">
+          <div class="gi-overlay"><span class="gi-cap">Sriracha Egg Toasties</span></div>
+        </div>
+        <div class="gi gi-short reveal d2" onclick="lbOpen(6)">
+          <img src="https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?w=800&q=80" alt="Matcha Bowl">
+          <div class="gi-overlay"><span class="gi-cap">Matcha Bowls</span></div>
+        </div>
+        <div class="gi gi-short reveal d3" onclick="lbOpen(7)">
+          <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&q=80" alt="Caramel Pancake">
+          <div class="gi-overlay"><span class="gi-cap">Caramel Walnut Pancake</span></div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:56px;" class="reveal">
+        <a href="https://www.instagram.com/bambae_cafe/" target="_blank" class="btn btn-outline-terra btn-lg">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          Follow @bambae_cafe on Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="page" id="page-contact">
+  <header class="pg-header">
+    <div class="container">
+      <span class="script-tag reveal">Come Visit</span>
+      <h1 class="heading reveal d1">Find Us</h1>
+      <p class="reveal d2">Drop by for a healthy bite at Bella Vista, or order straight to your door.</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="reveal">
+          <div class="info-box">
+            <h3 class="subheading" style="margin-bottom:36px;">Café Details</h3>
+            <div class="info-item">
+              <div class="info-ico">📍</div>
+              <div class="info-txt">
+                <h4>Location</h4>
+                <p>Kiosk K-2, Ground Floor<br>Welcomhotel Bella Vista<br>Sector 5, Panchkula, Haryana 134109</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-ico">🕐</div>
+              <div class="info-txt">
+                <h4>Hours</h4>
+                <table class="hours-table">
+                  <tr><td>Monday – Friday</td><td>8:00 AM – 10:00 PM</td></tr>
+                  <tr><td>Saturday – Sunday</td><td>8:00 AM – 10:00 PM</td></tr>
+                </table>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="info-ico">📞</div>
+              <div class="info-txt">
+                <h4>Contact</h4>
+                <p><a href="tel:+919501011265" style="color:var(--terra);font-weight:500;">+91 95010 11265</a></p>
+              </div>
+            </div>
+            <div class="info-item" style="margin-top:8px;">
+              <div class="info-ico">🌐</div>
+              <div class="info-txt">
+                <h4>Order Online</h4>
+                <p style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+                  <a href="https://www.zomato.com/chandigarh/bam-bae-sector-5-panchkula" target="_blank" class="btn btn-zomato btn-sm">Zomato</a>
+                  <a href="https://www.swiggy.com/city/chandigarh/bambae-panchkula-rest1339456" target="_blank" class="btn btn-swiggy btn-sm">Swiggy</a>
+                </p>
+              </div>
+            </div>
+            <button onclick="resOpen()" class="btn btn-terra" style="width:100%;justify-content:center;margin-top:28px;padding:14px;">
+              Book a Table
+            </button>
+          </div>
+        </div>
+        <div class="map-wrap reveal d2">
+          <iframe src="https://maps.google.com/maps?q=30.6956652,76.8540974&hl=en&z=16&output=embed" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="f-logo">Bam<em>Bae</em></div>
+        <p class="f-desc">Panchkula's premier health café. Authentic Bánh Mì, Ice Teas, Smoothie Bowls and Specialty Coffee inside Welcomhotel Bella Vista.</p>
+        <div class="f-socials">
+          <a href="https://www.instagram.com/bambae_cafe/" target="_blank" class="fsoc">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="https://www.facebook.com/people/BamBaecafe/61584840075080/" target="_blank" class="fsoc">
+            <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+          </a>
+          <a href="https://wa.me/919501011265" target="_blank" class="fsoc">
+            <svg viewBox="0 0 24 24" style="fill:currentColor; stroke:none;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="f-heading">Explore</div>
+        <ul class="f-links">
+          <li><a onclick="go('home')">Home</a></li>
+          <li><a onclick="go('menu')">Menu</a></li>
+          <li><a onclick="go('about')">Our Story</a></li>
+          <li><a onclick="go('gallery')">Gallery</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="f-heading">Order</div>
+        <ul class="f-links">
+          <li><a href="https://www.zomato.com/chandigarh/bam-bae-sector-5-panchkula" target="_blank">Zomato</a></li>
+          <li><a href="https://www.swiggy.com/city/chandigarh/bambae-panchkula-rest1339456" target="_blank">Swiggy</a></li>
+          <li><a href="https://wa.me/919501011265" target="_blank">WhatsApp Order</a></li>
+          <li><a onclick="go('contact')">Directions</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="f-heading">Reserve</div>
+        <p style="font-size:.88rem;color:rgba(248,244,237,.55);margin-bottom:18px;font-weight:300;line-height:1.7;">Planning a visit? We'd love to have you.</p>
+        <button onclick="resOpen()" class="btn" style="width:100%;justify-content:center;border-color:rgba(255,255,255,.2);color:rgba(248,244,237,.8);padding:12px;">Book a Table</button>
+        <div style="margin-top:20px;">
+          <p style="font-size:.82rem;color:rgba(248,244,237,.45);margin-bottom:8px;">Open every day</p>
+          <p style="font-size:.9rem;color:rgba(248,244,237,.7);font-weight:500;">8:00 AM – 10:00 PM</p>
+        </div>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <p>BamBae Café Panchkula. All rights reserved.</p>
+      <div class="f-badge">
+        <span>📍</span> Sector 5, Panchkula
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
